@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/css/style.css?v=<%= Time.now.to_i %>">
+  <title>Play Detail</title>
+</head>
+<body>
+<div>
+    <div>
+        <div>
+            <img  src="/assets/kv/<%= @play.kv %>">
+        </div>
+        <div>
+            <h1> <%= @play.title %> </h1>
+            <% min = @play.schedules.minimum(:day) %>
+            <% max = @play.schedules.maximum(:day) %>
+            <% if min == max %>
+                <h2> <%= min %> </h2>
+            <% else %> 
+                <h2> <%= min %> ~ <%= max %></h2>
+            <% end %>
+            <p> <%= @play.description %> </p>
+        </div>
+    </div>
+    <div>
+        <div>
+            <% @schedule_days.each do |day,schedules| %>
+            <div onclick="showDate('<%= day %>')">
+                <%= day.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[day.wday] %>）
+            </div>
+            <% end %>
+        </div>
+        <div>
+            <% @schedule_days.each_with_index do |(day, schedules), index| %>
+                <div id="<%= day %>" class="schedule" style="<%= 'display: none;' if index > 0 %>">
+                    <% schedules.each do |sche| %>
+                    <form action='/plays/<%= @play.id %>/book/<%= sche.id %>' type="post">
+                        <button>
+                            <p> <%= sche.time.strftime("%H:%M") %> ~ <%= (sche.time + sche.duration * 60).strftime("%H:%M") %></p>
+                            <p> ▶予約する</p>
+                        </button>
+                    </form>
+                    <% end %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+function showDate(day) 
+{
+    const allLists = document.querySelectorAll('.schedule');
+    allLists.forEach(list => 
+    {
+        list.style.display = 'none';
+    });
+    
+    const selectedList = document.getElementById(day);
+    
+    if (selectedList) 
+    {
+        selectedList.style.display = 'block';
+    }
+}
+</script>

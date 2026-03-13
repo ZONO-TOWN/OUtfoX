@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title>Riddle Booking</title>
+		<link rel="stylesheet" href="/assets/css/style.css?v=<%= Time.now.to_i %>">
+		<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+	</head>
+	<body>
+		<% if session[:user] %>
+		<nav class="center-horizontal">
+			<a href="/">
+				OUtfoX
+			</a>
+			<div class="top-tab">
+				<a href="*"> User </a>
+            	<a href="/sign_out">Sign out</a>
+			</div>
+		</nav>
+	    <% end %>
+
+		<main>
+			<%= yield %>
+		</main>
+	</body>
+</html>
