@@ -13,6 +13,7 @@ class NewTables < ActiveRecord::Migration[7.2]
       s.date :day
       s.time :time
       s.integer :duration
+      s.integer :book_number
     end
     
     create_table :riddles do |r|
@@ -21,7 +22,7 @@ class NewTables < ActiveRecord::Migration[7.2]
       r.string :img
       r.string :answer
       r.text :explain
-      r.integer :level
+      r.integer :point
     end
     
     create_table :users do |u|
@@ -34,6 +35,7 @@ class NewTables < ActiveRecord::Migration[7.2]
     create_table :books do |b|
       b.integer :user_id
       b.integer :play_id
+      b.integer :schedule_id
       b.integer :headcount
       b.string :token
       b.timestamps

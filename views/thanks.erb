@@ -1,0 +1,28 @@
+<div id="modal" class="modal-wrapper">
+    <div class="modal-container">
+        <h2>予約完了！</h2>
+
+        <div class="book-info">
+            <h3 class="title">【公演名】 <%= @play.title %></h3>
+            <p class="datetime">
+                <%= @schedule.day.strftime("%-m/%-d") %>(<%= %w(日 月 火 水 木 金 土)[@schedule.day.wday] %>) 
+                <%= @schedule.time.strftime("%H:%M") %> ~ <%= (@schedule.time + @schedule.duration * 60).strftime("%H:%M") %>
+            </p>
+        </div>
+
+        <div class="guest-info">
+            <p><span class="label">名前：</span> <%= @guest.guest_name %></p>
+            <p><span class="label">得点：</span> <strong class="score"><%= @guest.score %>点</strong></p>
+        </div>
+
+        <div class="book-token">
+            <p>同行者への招待用URL</p>
+            <div class="invite-link-wrapper">
+                <a href="/guest/<%= @book.token %>" class="invite-link"><%= request.base_url %>/guest/<%= @book.token %></a>
+            </div>
+            <p class="message">※同行者の方にこのURLをシェアしてください</p>
+        </div>
+
+        <a href="/" class="close-btn">トップページに戻る</a>
+    </div>
+</div>

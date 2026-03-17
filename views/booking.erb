@@ -1,0 +1,31 @@
+<div class="booking-wrapper">
+    <div class="back-button">
+        <a href="/plays/<%= @play.id %>"> 詳細画面に戻る </a> 
+    </div>
+    <div class="booking-container">
+        <div class="left">
+            <img  src="/assets/kv/<%= @play.kv %>" width="300" height="424">
+            <p> <%= @play.title %> </p>
+        </div>
+        
+        <div class="right-top">
+            <h2> <%= @schedule.day.strftime("%-m/%-d") %>(<%= %w(日 月 火 水 木 金 土)[@schedule.day.wday] %>)  </h2>
+            <h2> <%= @schedule.time.strftime("%H:%M") %> ~ <%= (@schedule.time + @schedule.duration * 60).strftime("%H:%M") %> </h2>
+        </div>
+    
+        <form class="right-bottom" action="/plays/<%= @play.id %>/book/<%= @schedule.id %>" method="post">
+            <div class="booking-form">
+                <p> 氏名：
+                    <input type="text" name="guest_name" placeholder="あなたの名前">
+                </p>
+            </div>
+            <div class="booking-form">
+                <p> 予約人数：
+                    <input type="number" name="headcount" min=1 max=6>
+                    <span class="unit">人</span> </p>
+                </p>
+            </div>
+            <input type="submit" value="登録">
+        </form>
+    </div>
+</div>

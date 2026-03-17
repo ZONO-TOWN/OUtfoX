@@ -1,59 +1,67 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/assets/css/style.css?v=<%= Time.now.to_i %>">
-  <title>Play Detail</title>
-</head>
-<body>
-<div>
-    <div>
-        <div>
-            <img  src="/assets/kv/<%= @play.kv %>">
-        </div>
-        <div>
-            <h1> <%= @play.title %> </h1>
+<div class="detail-wrapper">
+    <div class="detail-top">
+        <img  class="kv" src="/assets/kv/<%= @play.kv %>">
+        
+        <div class="play-detail">
+            <h1 class="title"> <%= @play.title %> </h1>
             <% min = @play.schedules.minimum(:day) %>
             <% max = @play.schedules.maximum(:day) %>
-            <% if min == max %>
-                <h2> <%= min %> </h2>
-            <% else %> 
-                <h2> <%= min %> ~ <%= max %></h2>
-            <% end %>
+            <h2 class="date">
+                <%  if min == max %>
+                    <%= min.strftime("%-Y年%-m月%-d日") %>
+                <%  else %>
+                    <%= min.strftime("%-Y年%-m月%-d日") %> ~ <%= max.strftime("%-Y年%-m月%-d日") %>
+                <% end %>
+            </h2>
             <p> <%= @play.description %> </p>
         </div>
     </div>
-    <div>
-        <div>
+    
+    <hr class="separator">
+    
+    
+    <div class="detail-bottom">
+        <div class="dates">
             <% @schedule_days.each do |day,schedules| %>
-            <div onclick="showDate('<%= day %>')">
+            <div class="date-tab <%= 'active' if day == @schedule_days.keys.first %>" onclick="showDate('<%= day %>', this)">
                 <%= day.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[day.wday] %>）
             </div>
             <% end %>
         </div>
-        <div>
+        <div class="times">
             <% @schedule_days.each_with_index do |(day, schedules), index| %>
                 <div id="<%= day %>" class="schedule" style="<%= 'display: none;' if index > 0 %>">
-                    <% schedules.each do |sche| %>
-                    <form action='/plays/<%= @play.id %>/book/<%= sche.id %>' type="post">
-                        <button>
-                            <p> <%= sche.time.strftime("%H:%M") %> ~ <%= (sche.time + sche.duration * 60).strftime("%H:%M") %></p>
-                            <p> ▶予約する</p>
+                    <div class="sche-wrapper">
+                        <% schedules.each do |sche| %>
+                        <% remain = @play.capacity - sche.book_number %>
+                        <form action='/plays/<%= @play.id %>/book/<%= sche.id %>' method="get">
+                        <button class="book-button <% if remain <= 0 %>full
+                                                   <% elsif remain <= 20 %>few
+                                                   <% else %>fine
+                                                   <% end %>" <%= 'disabled' if remain <= 0 %>>
+                            <p> 
+                                <%= sche.time.strftime("%H:%M") %> ~ <%= (sche.time + sche.duration * 60).strftime("%H:%M") %>
+                                <% if remain <= 0 %>
+                                    <span style="color: #ff1a1a; font-weight: bold; font-size: 24px;">×</span>
+                                <% elsif remain <= 20 %>
+                                    <span style="color: #00c853; font-weight: bold; font-size: 24px;">△</span>
+                                <% else %>
+                                    <span style="color: #1976d2; font-weight: bold; font-size: 24px;">◎</span>
+                                <% end %>
+                            </p>
+                            <span> ▶予約する</span>
                         </button>
-                    </form>
+                        </form>
                     <% end %>
+                    </div>
                 </div>
             <% end %>
         </div>
     </div>
-    
 </div>
 
 <script>
-function showDate(day) 
-{
+function showDate(day, clickedTab) {
     const allLists = document.querySelectorAll('.schedule');
     allLists.forEach(list => 
     {
@@ -61,10 +69,19 @@ function showDate(day)
     });
     
     const selectedList = document.getElementById(day);
-    
     if (selectedList) 
     {
         selectedList.style.display = 'block';
+    }
+
+    const allTabs = document.querySelectorAll('.date-tab');
+    allTabs.forEach(tab => 
+    {
+        tab.classList.remove('active');
+    });
+    
+    if (clickedTab) {
+        clickedTab.classList.add('active');
     }
 }
 </script>

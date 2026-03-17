@@ -5,15 +5,22 @@
 		<title>Riddle Booking</title>
 		<link rel="stylesheet" href="/assets/css/style.css?v=<%= Time.now.to_i %>">
 		<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 	</head>
 	<body>
 		<% if session[:user] %>
 		<nav class="center-horizontal">
 			<a href="/">
-				OUtfoX
+				<img src="/assets/images/icon.jpg" height="60" width="60">
+				<span> OUtfoX </span>
 			</a>
+			<% if session[:user] == 1 %>
+				<h1 class="admin-title">管理者ページ</h1>
+			<% end %>
 			<div class="top-tab">
-				<a href="*"> User </a>
+				<a href="*"> マイページ </a>
             	<a href="/sign_out">Sign out</a>
 			</div>
 		</nav>

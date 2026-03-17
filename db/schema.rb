@@ -17,6 +17,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_09_155356) do
   create_table "books", force: :cascade do |t|
     t.integer "user_id"
     t.integer "play_id"
+    t.integer "schedule_id"
     t.integer "headcount"
     t.string "token"
     t.datetime "created_at", null: false
@@ -45,7 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_09_155356) do
     t.string "img"
     t.string "answer"
     t.text "explain"
-    t.integer "level"
+    t.integer "point"
   end
 
   create_table "schedules", force: :cascade do |t|
@@ -53,6 +54,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_09_155356) do
     t.date "day"
     t.time "time"
     t.integer "duration"
+    t.integer "book_number"
   end
 
   create_table "users", force: :cascade do |t|

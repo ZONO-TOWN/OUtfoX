@@ -19,6 +19,8 @@ end
 
 class Schedule < ActiveRecord::Base
     belongs_to :play
+    
+    has_many :books
 end
 
 class Riddle < ActiveRecord::Base
@@ -28,6 +30,7 @@ end
 class Book < ActiveRecord::Base
     belongs_to :user
     belongs_to :play
+    belongs_to :schedule
     
     has_many :guests
 end
