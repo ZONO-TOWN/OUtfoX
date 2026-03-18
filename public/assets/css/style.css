@@ -154,7 +154,7 @@ sign_in, sign_up
     grid-row: 1/2;
     display: flex;
     align-items: center;
-    gap: 20px
+    gap: 20px;
 }
 
 .right-top h2 {
@@ -168,6 +168,14 @@ sign_in, sign_up
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+.leader-name {
+    font-size: 20px;
+    color: #333;
+    padding: 12px 15px;
+    margin: 0 0 20px 0;
+    text-align: center;
 }
 
 .booking-form p {
@@ -213,6 +221,13 @@ sign_in, sign_up
     cursor: pointer;
     margin: 20px auto 0; 
     display: block;
+}
+
+.caution {
+    font-size: 16px;
+    color: red;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* 

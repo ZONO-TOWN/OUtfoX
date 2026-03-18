@@ -1,7 +1,4 @@
 <div class="booking-wrapper">
-    <div class="back-button">
-        <a href="/plays/<%= @play.id %>"> 詳細画面に戻る </a> 
-    </div>
     <div class="booking-container">
         <div class="left">
             <img  src="/assets/kv/<%= @play.kv %>" width="300" height="424">
@@ -14,18 +11,13 @@
         </div>
     
         <form class="right-bottom" action="/plays/<%= @play.id %>/book/<%= @schedule.id %>" method="post">
+            <h3 class="leader-name"> 代表者：<%= @book.user.user_name %></h3>
             <div class="booking-form">
                 <p> 氏名：
                     <input type="text" name="guest_name" placeholder="あなたの名前">
                 </p>
             </div>
-            <div class="booking-form">
-                <p> 予約人数：
-                    <input type="number" name="headcount" min=1 max=6>
-                    <span class="unit">人</span> </p>
-                </p>
-            </div>
-            <input type="submit" value="予約する">
+            <input type="submit" value="登録する">
             <p class="caution"> ※登録後、謎解きが始まります </p>
         </form>
     </div>

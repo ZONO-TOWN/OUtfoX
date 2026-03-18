@@ -18,7 +18,8 @@ before do
         Play.create(
          title: "巨大まちかねワニからの脱出",
          kv: "wani.jpg",
-         description: "新歓イベントのための特別公演！
+         description: 
+         "新歓イベントのための特別公演！
          迫りくる巨大まちかねワニから町を守り切れ！",
          capacity: 60)
     end
@@ -96,7 +97,7 @@ post '/plays/:id/book/:schedule_id' do
       headcount: params[:headcount],
       token: random_token)
       
-    Guest.create(
+    leader = Guest.create(
       book_id: book.id,
       guest_name: params[:guest_name],
       score: 0,
@@ -104,9 +105,38 @@ post '/plays/:id/book/:schedule_id' do
      
     schedule = Schedule.find(params[:schedule_id]) 
     schedule.update(book_number: schedule.book_number + params[:headcount].to_i)
+    
+    session[:guest] = leader.id
       
     redirect "/guest/#{book.token}/riddle"
 end
+
+get '/guest/:token' do
+    @book = Book.find_by(token: params[:token])
+    @schedule = @book.schedule
+    @play = @schedule.play
+    
+    erb :invite
+end
+
+post '/guest/:token' do
+    book = Book.find_by(token: params[:token])
+    if book.guests.count < book.headcount    
+        guest = Guest.create(
+        book_id: book.id,
+        guest_name: params[:guest_name],
+        score: 0,
+        is_leader: false)
+        
+        session[:guest] = guest.id
+    
+        redirect "/guest/#{book.token}/riddle"
+    else
+        redirect "/guest/#{book.token}"
+    end
+end
+
+
 
 get '/guest/:token/riddle' do
     book = Book.find_by(token: params[:token])
@@ -128,8 +158,9 @@ post '/guest/:token/riddle' do
         end
     end
 
-    if book.guests.first
-        book.guests.first.update(score: score)
+    if session[:guest]
+        guest = Guest.find_by(id: session[:guest])
+        guest.update(score: score) 
     end
     
     redirect "/guest/#{book.token}/thanks"
@@ -139,7 +170,7 @@ get '/guest/:token/thanks' do
     @book = Book.find_by(token: params[:token])
     @play = @book.play
     @schedule = @book.schedule
-    @guest = @book.guests.first
+    @guest = Guest.find_by(id: session[:guest])
     
     erb :thanks
 end
